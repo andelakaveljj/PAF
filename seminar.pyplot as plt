@@ -1,0 +1,58 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+def provjeri_tocku_u_krugu(x_tocka, y_tocka, x_centar, y_centar, radijus, spremi_ime=None):
+    # Izračunaj udaljenost točke od centra kružnice
+    udaljenost = np.sqrt((x_tocka - x_centar) ** 2 + (y_tocka - y_centar) ** 2)
+    
+    # Provjeri gdje se točka nalazi u odnosu na kružnicu
+    if udaljenost < radijus:
+        status = "unutar kružnice"
+    elif udaljenost == radijus:
+        status = "na kružnici"
+    else:
+        status = "izvan kružnice"
+
+    # Ispis rezultata
+    print(f"Točka ({x_tocka}, {y_tocka}) je {status}.")
+    print(f"Udaljenost od centra kružnice je {udaljenost:.2f}.")
+
+    # Crtanje kružnice i točke
+    fig, ax = plt.subplots()
+    kruznica = plt.Circle((x_centar, y_centar), radijus, fill=False, color='blue', linestyle='-')
+    ax.add_artist(kruznica)
+    ax.plot(x_tocka, y_tocka, 'ro')  # točka
+    ax.plot(x_centar, y_centar, 'go')  # centar kružnice
+    
+    # Postavljanje granica grafa
+    ax.set_xlim(x_centar - radijus - 1, x_centar + radijus + 1)
+    ax.set_ylim(y_centar - radijus - 1, y_centar + radijus + 1)
+    ax.set_aspect('equal', 'box')
+    plt.grid(True)
+    plt.title(f'Točka ({x_tocka}, {y_tocka}) je {status}.')
+
+    # Prikaz ili spremanje slike
+    if spremi_ime:
+        plt.savefig(spremi_ime)
+        print(f"Slika je spremljena pod imenom {spremi_ime}.")
+    else:
+        plt.show()
+
+# Funkcija za unos korisničkih podataka
+def unos_podataka():
+    x_tocka = float(input("Unesite x koordinatu točke: "))
+    y_tocka = float(input("Unesite y koordinatu točke: "))
+    x_centar = float(input("Unesite x koordinatu centra kružnice: "))
+    y_centar = float(input("Unesite y koordinatu centra kružnice: "))
+    radijus = float(input("Unesite radijus kružnice: "))
+
+    # Korisnik bira želi li prikazati ili spremiti sliku
+    prikaz_ili_spremiti = input("Želite li prikazati sliku ili je spremiti? (prikazati/spremiti): ").strip().lower()
+    if prikaz_ili_spremiti == "spremiti":
+        ime_datoteke = input("Unesite ime datoteke (s ekstenzijom, npr. 'slika.png'): ").strip()
+        provjeri_tocku_u_krugu(x_tocka, y_tocka, x_centar, y_centar, radijus, spremi_ime=ime_datoteke)
+    else:
+        provjeri_tocku_u_krugu(x_tocka, y_tocka, x_centar, y_centar, radijus)
+
+# Poziv funkcije za unos podataka
+unos_podataka()
